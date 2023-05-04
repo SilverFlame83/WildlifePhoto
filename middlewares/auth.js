@@ -7,12 +7,12 @@ const userService = require('../services/user')
 module.exports = () => (req, res, next) => {
     if(parseToken(req,res)){
         req.auth = {
-            async register(username, password) {
-                const token = await register(username, password);
+            async register(firstName,lastName, email, password) {
+                const token = await register(firstName,lastName, email, password);
                 res.cookie(COOKIE_NAME, token);
             },
-            async login(username, password) {
-                const token = await login(username, password);
+            async login(email, password) {
+                const token = await login(email, password);
                 res.cookie(COOKIE_NAME, token);
             },
             logout() {
@@ -25,23 +25,25 @@ module.exports = () => (req, res, next) => {
 };
 
 
-async function register(username, password) {
-    //TODO adapt parameters to project requirments
-    //TODO extra validation
-    const existing = await userService.getUserByUsername(username);
+async function register(firstName,lastName, email, password) {
+    const existingFirstName = await userService. getUserByFirstName(firstName);
+    const existingLasttName = await userService.getUserByLastName(lastName)
+    const existingEmail = await userService.getUserByEmail(email);
 
-    if (existing) {
+    if (existingFirstName || existingLasttName) {
         throw new Error('Username is taken!');
+    } else if(existingEmail){
+        throw new Error('Email is taken!');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await userService.createUser(username, hashedPassword);
+    const user = await userService.createUser(firstName,lastName, email, hashedPassword);
 
     return generateToken(user);
 }
 
-async function login(username, password) {
-    const user = await userService.getUserByUsername(username);
+async function login(email, password) {
+    const user = await userService.getUserByEmail(email);
 
     if (!user) {
         throw new Error('No such user');

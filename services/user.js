@@ -1,26 +1,45 @@
-const User = require('../models/User');
+const User = require("../models/User");
 
-async function createUser(username, hashedPassword) {
-    //TODO adapt properties to project requirments
-    const user = new User({
-        username,
-        hashedPassword
-    });
+async function createUser(firstName, lastName, email, hashedPassword) {
+  const user = new User({
+    firstName,
+    lastName,
+    hashedPassword,
+  });
 
-    user.save();
-    return user;
+  user.save();
+  return user;
 }
 
-async function getUserByUsername(username) {
-    const pattern = new RegExp(`^${username}$`, 'i');
-    const user = await User.findOne({ username: { $regex: pattern } });
-    return user;
+async function getUserByFirstName(firstName) {
+  const pattern = new RegExp(`^${firstName}$`, "i");
+  const user = await User.findOne({ firstName: { $regex: pattern } });
+  return user;
 }
 
+async function getUserByLastName(lastName) {
+    const pattern = new RegExp(`^${lastName}$`, "i");
+    const user = await User.findOne({ lastName: { $regex: pattern } });
+    return user;
+  }
 
-//TODO add function for finding user by other properties, as specified in the requirments
+async function getUserByEmail(email) {
+  const pattern = new RegExp(`^${email}$`, "i");
+  const user = await User.findOne({
+    email: { $regex: pattern },
+  });
+
+  return user;
+}
+
+async function findById(id) {
+  return User.findById(id);
+}
 
 module.exports = {
-    createUser,
-    getUserByUsername
-}
+  createUser,
+  getUserByFirstName,
+  getUserByLastName,
+  getUserByEmail,
+  findById,
+};
