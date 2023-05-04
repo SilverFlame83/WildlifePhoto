@@ -19,9 +19,11 @@ router.post(
     .withMessage("Last name must be at least 5 characters long"),
   body("email", "Invalid email").isEmail(),
   body("email")
-    .isAlphanumeric().withMessage('Only English letters')
     .isLength({ min: 10 })
     .withMessage("Email must be at least 10 characters long"),
+    body("password")
+    .isLength({ min: 5 })
+    .withMessage("Password should be at least 5 characters long!"),
   body("rePass").custom((value, { req }) => {
     if (value != req.body.password) {
       throw new Error("Passwords don't match!");
@@ -41,7 +43,6 @@ router.post(
           }
 
       await req.auth.register(req.body.firstName,req.body.lastName,req.body.email, req.body.password);
-
       res.redirect("/");
     } catch (err) {
       console.log(err.message);

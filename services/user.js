@@ -4,6 +4,7 @@ async function createUser(firstName, lastName, email, hashedPassword) {
   const user = new User({
     firstName,
     lastName,
+    email,
     hashedPassword,
   });
 
