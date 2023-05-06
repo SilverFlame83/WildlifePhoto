@@ -1,0 +1,16 @@
+const { Schema, model } = require('mongoose');
+
+const schema = new Schema({
+    title: { type: String, required: [true, 'Title is required and should be at least 6 characters long'] },
+    keyword: { type: String,max:15,  required: [true, 'Location shouldn\'t be longer than 15 characters long'] },
+    location: { type: String, required: true },
+    dateOfCreation: { type: Date, default:  new Date()},
+    imageUrl: {type: String, required: true},
+    description: {type: String, required: true},
+    author: {type: Schema.Types.ObjectId, ref: 'User'},
+    votes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
+    rating: {type: Number, required: true},
+
+});
+
+module.exports = model('Photo', schema);
