@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const authMiddleware = require('../middlewares/auth');
+const storageMiddleware = require('../middlewares/storage');
 
 module.exports = (app) => {
     
@@ -27,5 +28,5 @@ module.exports = (app) => {
 
         next();
     });
-    //TODO add storage and auth middlewares
+    app.use(storageMiddleware());
 };

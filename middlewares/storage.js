@@ -1,5 +1,9 @@
-module.exports = () => (req,res,next)=>{
-    //TODO import and decorate services
+const photo = require("../services/photo");
 
-    req.storage = {}
-}
+module.exports = () => (req, res, next) => {
+  req.storage = {
+    ...photo,
+  };
+
+  next();
+};
