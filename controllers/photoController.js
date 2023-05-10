@@ -39,8 +39,10 @@ router.post("/create", isUser(), async (req, res) => {
   }
 });
 
-router.get('/catalog', async(req,res)=>{
-    res.render('catalog')
-})
+router.get("/catalog", async (req, res) => {
+  const photos = await req.storage.getAllPhoto();
+
+  res.render("catalog", {photos});
+});
 
 module.exports = router;
