@@ -45,4 +45,12 @@ router.get("/catalog", async (req, res) => {
   res.render("catalog", {photos});
 });
 
+router.get('/details/:id', async (req,res)=>{
+  const photo = await req.storage.getPhotoById(req.params.id);
+
+  res.render('details', {photo})
+});
+
+
+
 module.exports = router;
