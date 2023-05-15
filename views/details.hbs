@@ -4,36 +4,38 @@
     <div class="card_left">
       <div class="card_datails">
 
-        <h1>Title: {photo.title}</h1>
-        <h3>Created by an author: Alex Petkov</h3>
+        <h1>Title: {{photo.title}}</h1>
+        <h3>Created by an author: {{photo.owner.firstName}} {{photo.owner.lastName}}</h3>
         <div class="card_animal">
-          <p class="card-keyword">Keyword: Animal</p>
-          <p class="card-location">Location: North America</p>
-          <p class="card-date">Date: 18.02.2021</p>
+          <p class="card-keyword">Keyword: {{photo.keyword}}</p>
+          <p class="card-location">Location: {{photo.location}}</p>
+          <p class="card-date">Date: {{currentDate}}</p>
         </div>
 
-        <p class="disc">Description: Monkey, in general, any of nearly 200
-          species of tailed primate, with the exception of lemurs, tarsiers, and
-          lorises.All but the durukuli of tropical Central and South America are
-          active during the day, moving frequently in bands as they search for
-          vegetation.</p>
+        <p class="disc">{{photo.description}}</p>
 
         <!-- If there is no registered user, do not display buttons-->
         <div class="social-btn">
+          
           <!-- Only for registered user and author of the post -->
-          <a href="#" class="edit-btn">Edit</a>
-          <a href="#" class="del-btn">Delete</a>
+          {{#if photo.isOwner}}
+          <a href="/photo/edit/{{photo._id}}" class="edit-btn">Edit</a>
+          <a href="/photo/delete/{{photo._id}}" class="del-btn">Delete</a>
           <!-- logged in users, who have not yet voted-->
-          <a href="#" class="vote-up">UpVote +1</a>
-          <a href="#" class="vote-down">DownVote -1</a>
+          {{else}}
+          {{#unless photo.vote}}
+          <a href="/photo/votePositive/{{photo._id}}" class="vote-up">UpVote +1</a>
+          <a href="/photo/voteNegative/{{photo._id}}" class="vote-down">DownVote -1</a>
           <!-- logged in user who has already voted-->
+          {{else}}
           <p class="thanks-for-vote">Thanks For Voting</p>
-
+          {{/unless}}
+          {{/if}}
         </div>
       </div>
     </div>
     <div class="card_right">
-      <img src="/static/img/animal.jpg" alt="image" />
+      <img src="{{photo.imageUrl}}" alt="image" />
     </div>
   </div>
 

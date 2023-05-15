@@ -34,11 +34,24 @@ async function deletePhoto(id) {
   await Photo.findByIdAndDelete(id);
 }
 
+async function votePhotoPositive(photoId, userId){
+  const photo = await Photo.findById(photoId);
+
+    photo.votes.push(userId);
+
+  return photo.save();
+}
+
+async function votePhotoNegative(){
+
+}
+
 
 module.exports= {
   getAllPhoto,
   getPhotoById,
   createPhoto,
   editPhoto,
+  votePhotoPositive,
   deletePhoto
 }

@@ -20,6 +20,8 @@ router.post("/create", isUser(), async (req, res) => {
     };
 
     await req.storage.createPhoto(photoData);
+
+    res.redirect('/photo/catalog')
   } catch (err) {
     console.log(err.message);
 
@@ -45,11 +47,43 @@ router.get("/catalog", async (req, res) => {
   res.render("catalog", {photos});
 });
 
-router.get('/details/:id', async (req,res)=>{
+router.get('/details/:id', isUser(), async (req,res)=>{
   const photo = await req.storage.getPhotoById(req.params.id);
 
-  res.render('details', {photo})
+  const [year,day,month] = photo.dateOfCreation.toLocaleDateString('EU').split('/');
+
+  let currentDate= `${day.padStart(2,"0")}.${month.padStart(2,"0")}.${year}`;
+  photo.isOwner = req.user && req.user._id == photo.owner._id;
+
+
+  photo.vote = req.user && photo.votes.find((u)=> u == req.user._id)
+
+  console.log(photo.votes)
+
+  res.render('details', {photo, currentDate})
 });
+
+router.get('/votePositive/:id', isUser(), async(req,res)=>{
+  try{
+    await req.storage.votePhotoPositive(req.params.id, req.user._id);
+
+    res.redirect('/photo/details/'+ req.params.id)
+  }catch(err){
+    console.log('Error', err.message);
+    res.redirect('/photo/details/'+ req.params.id)
+  }
+})
+
+router.get('voteNegative/:id', isUser(), async(req,res)=>{
+  try{
+    await req.storage.votePhotoNegative(req.params.id, req.user._id);
+
+    res.redirect('/photo/details/'+ req.params.id)
+  }catch(err){
+    console.log('Error', err.message);
+    res.redirect('/photo/details/'+ req.params.id)
+  }
+})
 
 
 
