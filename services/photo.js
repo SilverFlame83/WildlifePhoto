@@ -1,11 +1,16 @@
 const Photo = require("../models/Photo");
+const User = require('../models/User');
 
 async function getAllPhoto() {
   return Photo.find().populate("owner").lean();
 }
 
 async function getPhotoById(id) {
-  return Photo.findById(id).populate("owner").lean();
+  return Photo.findById(id).populate("vote").lean();
+}
+
+async function getUserById(id) {
+  return User.findById(id).lean();
 }
 
 async function createPhoto(photoData) {
@@ -34,24 +39,31 @@ async function deletePhoto(id) {
   await Photo.findByIdAndDelete(id);
 }
 
-async function votePhotoPositive(photoId, userId){
+async function votePhotoPositive(photoId, userId) {
   const photo = await Photo.findById(photoId);
 
-    photo.votes.push(userId);
+  photo.votes.push(userId);
+  photo.rating += 1;
 
   return photo.save();
 }
 
-async function votePhotoNegative(){
+async function votePhotoNegative(photoId, userId) {
+  const photo = await Photo.findById(photoId);
 
+  photo.votes.push(userId);
+  photo.rating -= 1;
+
+  return photo.save();
 }
 
-
-module.exports= {
+module.exports = {
   getAllPhoto,
   getPhotoById,
+  getUserById,
   createPhoto,
   editPhoto,
   votePhotoPositive,
-  deletePhoto
-}
+  votePhotoNegative,
+  deletePhoto,
+};

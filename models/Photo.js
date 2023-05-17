@@ -9,7 +9,7 @@ const schema = new Schema({
     description: {type: String, required: true},
     owner: {type: Schema.Types.ObjectId, ref: 'User'},
     votes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
-
+    rating:{type: Number, default:0}
 });
 
 module.exports = model('Photo', schema);

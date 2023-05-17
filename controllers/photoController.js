@@ -56,11 +56,17 @@ router.get('/details/:id', isUser(), async (req,res)=>{
   photo.isOwner = req.user && req.user._id == photo.owner._id;
 
 
-  photo.vote = req.user && photo.votes.find((u)=> u == req.user._id)
+  photo.vote = req.user && photo.votes.find((u)=> u == req.user._id);
+  let voteUsers = [];
 
-  console.log(photo.votes)
+  for(let user of photo.votes){
+    let u = await req.storage.getUserById(user);
 
-  res.render('details', {photo, currentDate})
+    voteUsers.push(u.email);
+  }
+
+  console.log(voteUsers)
+  res.render('details', {photo, currentDate, voteUsers})
 });
 
 router.get('/votePositive/:id', isUser(), async(req,res)=>{
