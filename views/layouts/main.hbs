@@ -32,7 +32,7 @@
           <!-- Logged users -->
           {{#if user}}
             <li><a href="/photo/create">Create Post</a></li>
-            <li><a href="/phpto/posts">Posts of {{email}}</a></li>
+            <li><a href="/photo/posts">Posts of {{user.email}}</a></li>
             <li><a href="/auth/logout">Logout</a></li>
           {{else}}
             <!-- Guest users -->

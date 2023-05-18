@@ -126,4 +126,25 @@ router.post("/edit/:id", isUser(), async (req, res) => {
   }
 });
 
+router.get('/posts', isUser(), async(req,res)=>{
+  try{
+    res.render('my-posts')
+
+  }catch(err){
+    console.log(err.message)
+  }
+})
+
+router.get('/delete/:id', isUser(), async(req,res)=>{
+  try{
+
+    await req.storage.deletePhoto(req.params.id);
+    res.redirect('/photo/catalog/')
+
+  }catch(err){
+    console.log(err.message);
+    res.redirect('/photo/catalog/')
+  }
+})
+
 module.exports = router;
